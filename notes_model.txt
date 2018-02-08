@@ -12,3 +12,6 @@ class Meta:
 python manage.py makemigrations
 # 於admin package 中產生相對印的權限
 python manage.py migrate  
+
+# order_by 中加 - 表示遞減
+Entry.objects.filter(pub_date__year=2005).order_by('-pub_date', 'headline')
