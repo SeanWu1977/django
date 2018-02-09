@@ -1,0 +1,79 @@
+1. 啟用和停用防火牆
+下面這一行指令會啟用防火牆功能，而且，之後的每次開機都會自動載入和啟用的，要注意的是，如果沒有特別的設定的話，ufw 在啟用後，預設是會關閉所有的連入要求的哩 !
+
+$ sudo ufw enable
+
+如果要停用的話，則是用下面這一行，一旦停用後，也會同時停止在開機後自動載入的哩 !
+
+$ sudo ufw disable
+
+
+2. 允許和關閉連入
+下面的第一行指令會讓所有的連入要求都通過，等於防火牆對別台電腦的連接要求都接受的意思，而第二行指令則是不允許任何的連入要求，至於要用那一種，就要看你是先全部都打開再各別設定要封鎖的服務還是全部都先關閉，然後，再依需要來個別開通囉 !
+
+$ sudo ufw default allow
+$ sudo ufw default deny
+
+
+3. 新增防火牆規則
+下面幾種是常用的規則新增方式，都可適用在 deny 和 allow 的操作上。
+
+$ sudo ufw allow ssh  ( 使用服務名稱來允許連入，服務名稱請參考 /etc/services 檔案 )
+$ sudo ufw allow  in 8080   ( 使用 Port 號來允許連入 )
+$ sudo ufw deny out 4662  ( 使用 Port 號來拒絕連出到別台電腦的指定 Port 號 )
+$ sudo ufw deny in 4662/udp ( 使用 Port 號來拒絕接受指定 Port 號的 UDP 連入要求 )
+
+
+4. 刪除規則防火牆規則
+要刪除現有的規則的話，會比較麻煩一點點，因為，為了要能精準的刪除指定規則，所以，就需要明確的指出要刪除的規則的編號是多少，因此，可以要先用下面的第一行的指令的來查詢規則的編號，然後，才能用第三行的指令方式來刪除規則哩 !
+
+$ sudo ufw status numbered
+
+$ sudo ufw delete 規則號碼
+
+
+5. 啟用日誌記錄
+如果想知道防火牆到底有沒有用或是規則有沒有達到效果的話，可以用下面的指令來啟用日誌功能，在啟用後，ufw 會把記錄寫到 /var/log/ufw.log 日誌檔。
+
+$ sudo ufw logging on
+
+
+6. 檢視規則和狀態
+除了前面提到的「status numbered」選項之外，ufw 還提供有下面二種選項來供查看 ufw 的規則和狀態哩 !
+
+sudo ufw status
+sudo ufw status verbose
+
+
+
+2.install ssh server
+sudo apt-get install openssh-server -y
+sudo gedit /etc/ssh/sshd_config
+	Setting Port 
+sudo service ssh restart
+
+
+
+sudo apt-get update
+sudo apt-get install python3-pip
+sudo -H pip3 install --upgrade pip
+sudo -H pip3 install virtualenv virtualenvwrapper
+echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
+echo "export WORKON_HOME=~/Env" >> ~/.bashrc
+echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+source ~/.bashrc
+
+
+
+source bin/activate
+deactivate
+
+
+
+
+## Virtualenvwrapper 用法
+mkvirtualenv atenweb
+lsvirtualenv    # list env
+rmvirtualenv  [environment_name]  # delete env
+cpvirtualenv  [environment_name]	# clone env
+workon  [environment_name]	# active env
