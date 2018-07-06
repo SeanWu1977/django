@@ -15,3 +15,10 @@ python manage.py migrate (--database DATABASE)
 
 # order_by 中加 - 表示遞減
 Entry.objects.filter(pub_date__year=2005).order_by('-pub_date', 'headline')
+
+# __gte >= , __gt > ...
+records = Ipmpc.objects.using(usedb).filter(date__gte='20180703',  date__lte='20180704',ip__in=['a','b']).order_by('-date')
+like select * from Ipmpc where date >= '20180703' and date <='20180704' and ip in ('a','b') order by date desc
+# keyword : Field lookups
+
+
