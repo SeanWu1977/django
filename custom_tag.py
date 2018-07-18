@@ -7,5 +7,17 @@
   
 # in directory "templatetags", create xxx.py
 
+# xxx.py
+from django import template
+
+register = template.Library()
+
+@register.filter
+def price(value):
+    return value/100
+
+
+
 # in html 
 {% load xxx %}
+{% value|price%}
