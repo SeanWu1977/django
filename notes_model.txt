@@ -17,8 +17,17 @@ python manage.py migrate (--database DATABASE) #指的是將DJANGO MODEL的資�
 Entry.objects.filter(pub_date__year=2005).order_by('-pub_date', 'headline')
 
 # __gte >= , __gt > ...
+from django.db.models import Q, Max, Min
+
 records = table.objects.using(db).filter(date__gte='20180703',  date__lte='20180704',col__in=['a','b']).order_by('-date')
-like select * from Ipmpc where date >= '20180703' and date <='20180704' and col in ('a','b') order by date desc
+#like select * from Ipmpc where date >= '20180703' and date <='20180704' and col in ('a','b') order by date desc
+
+records = Netadaptermonitor.objects.using(db).filter(Q(detecttime__gte=20180703)).values('computername', 'username','networkadapter').annotate(orgnamepath=Max('orgnamepath')).annotate(s_time=Min('detecttime')).annotate(e_time=Max('detecttime'))    
+#like select 'computername', 'username','networkadapter',Max('orgnamepath') as orgnamepath,Min('detecttime') as s_time,Max('detecttime') as e_time where  date >= '20180703' group by 'computername', 'username','networkadapter'
+# values()  ==> group by  
+
+
+
 # keyword : Field lookups
 
 
