@@ -12,7 +12,7 @@ class Meta:
 python manage.py makemigrations
 # 於admin package 中產生相對印的權限
 python manage.py migrate (--database DATABASE) #指的是將DJANGO MODEL的資料(權限/META DATA)寫的那個DB
-
+python manage.py migrate auth --database usertest # 只migrate auth app 的table
 # order_by 中加 - 表示遞減
 Entry.objects.filter(pub_date__year=2005).order_by('-pub_date', 'headline')
 
