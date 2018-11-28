@@ -44,7 +44,7 @@ class MyModelChoiceField(ModelChoiceField):
 class MyUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = MyUser
-    oid = MyModelChoiceField(queryset=Org.objects.all())
+    oid = MyModelChoiceField(queryset=Org.objects.all(),verbose_name='Organization ID')
 
     
 class MyUserAdmin(UserAdmin):
