@@ -1,5 +1,8 @@
 # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
-#Extending User Model Using a Custom Model Extending AbstractUser
+# Extending User Model Using a Custom Model Extending AbstractUser
+
+# 要在還沒有db table時就要先執行，或是先把db table跟migration file刪除在執行 
+
 
 # models.py
 from django.db import models
