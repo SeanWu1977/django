@@ -8,7 +8,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
-    bio = models.TextField(max_length=500, blank=True)
+    oid = models.CharField(db_column='O_ID', max_length=3, blank=True, null=True, verbose_name='Organization ID')
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     
@@ -22,6 +22,21 @@ AUTH_USER_MODEL = 'usblog.User'  # <<appname>>.User
 
 
 #admin.py
-from usblog.models import User
-admin.site.register(User)
+from usblog.models import User as MyUser
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserChangeForm
+
+class MyUserChangeForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        model = MyUser
+
+class MyUserAdmin(UserAdmin):
+    form = MyUserChangeForm
+    fieldsets = UserAdmin.fieldsets + (
+            ('Customize', {'fields': ('oid',)}),
+    )
+
+
+admin.site.register(MyUser, MyUserAdmin)
+
 
