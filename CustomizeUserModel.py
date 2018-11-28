@@ -12,6 +12,14 @@ class User(AbstractUser):
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     
+class Org(models.Model):
+    oid = models.CharField(db_column='O_ID', primary_key=True, max_length=3,verbose_name='Organization ID')  # Field name made lowercase.
+    odesc = models.CharField(db_column='O_DESC', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    class Meta:
+        db_table = 'ORGTABLE'
+    def __str__(self):
+        return self.oid # admin page 存檔時會用此回傳值    
+    
 # settings.py
 AUTH_USER_MODEL = 'usblog.User'  # <<appname>>.User
 
@@ -21,21 +29,29 @@ AUTH_USER_MODEL = 'usblog.User'  # <<appname>>.User
 
 
 
-#admin.py
-from usblog.models import User as MyUser
+#admin.py (org 下拉選單)
+from django.contrib import admin
+from usblog.models import User as MyUser,Org
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
+from django import forms
+from django.forms import ModelChoiceField
+
+class MyModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.odesc
 
 class MyUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = MyUser
+    oid = MyModelChoiceField(queryset=Org.objects.all())
 
+    
 class MyUserAdmin(UserAdmin):
     form = MyUserChangeForm
     fieldsets = UserAdmin.fieldsets + (
             ('Customize', {'fields': ('oid',)}),
     )
-
 
 admin.site.register(MyUser, MyUserAdmin)
 
