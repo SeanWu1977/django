@@ -8,9 +8,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
-    oid = models.CharField(db_column='O_ID', max_length=3, blank=True, null=True, verbose_name='Organization ID')
-    location = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+    oid = models.CharField(db_column='O_ID', max_length=3, blank=True, null=True,verbose_name='Organization ID')
+    REQUIRED_FIELDS = ['oid','email']
+    def __str__(self):
+        return '{}({})'.format(self.username, self.email)
     
 class Org(models.Model):
     oid = models.CharField(db_column='O_ID', primary_key=True, max_length=3,verbose_name='Organization ID')  # Field name made lowercase.
@@ -39,14 +40,15 @@ from django.forms import ModelChoiceField
 
 class MyModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
-        return obj.odesc
+        return '({}){}'.format(obj.oid , obj.odesc)
 
 class MyUserChangeForm(UserChangeForm):
+
     class Meta(UserChangeForm.Meta):
         model = MyUser
-    oid = MyModelChoiceField(queryset=Org.objects.all(),verbose_name='Organization ID')
+    oid = MyModelChoiceField(queryset=Org.objects.all(), label='Organization ID')
 
-    
+
 class MyUserAdmin(UserAdmin):
     form = MyUserChangeForm
     fieldsets = UserAdmin.fieldsets + (
