@@ -43,3 +43,21 @@ def file_down(request):
     response['Content-Type']='application/octet-stream'  
     response['Content-Disposition']='attachment;filename="example.tar.gz"'  
     return response 
+
+
+## url 網址加密版本
+#url.py
+url(r'^test/(\S+)/$', views.file_down, name = 'test'),
+
+#view.py
+def file_down(request,value):
+    from django.http import FileResponse
+    from django.core import signing
+    filename = signing.loads(value)
+    dir = '<absolute path>'   
+    full_name = '{}/{}'.format(dir,filename)
+    file=open(full_name,'rb')
+    response =FileResponse(file)
+    response['Content-Type']='application/octet-stream'
+    response['Content-Disposition']='attachment;filename="{}"'.format('donw.xls')
+    return response
