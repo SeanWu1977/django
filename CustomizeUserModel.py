@@ -2,6 +2,9 @@
 # Extending User Model Using a Custom Model Extending AbstractUser
 
 # 要在還沒有db table時就要先執行，或是先把db table跟migration file刪除在執行 
+# python manage.py makemigrations
+# python manage.py migrate
+# python manage.py createsuperuser
 
 
 # models.py
