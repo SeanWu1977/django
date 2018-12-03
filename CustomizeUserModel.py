@@ -7,13 +7,13 @@
 # models.py
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-class User(AbstractUser):
+class ATENUser(AbstractUser):
     oid = models.CharField(db_column='O_ID', max_length=3, blank=True, null=True,verbose_name='Organization ID')
     REQUIRED_FIELDS = ['oid','email']
     def __str__(self):
         return '{}({})'.format(self.username, self.email)
     
-class Org(models.Model):
+class ATENORG(models.Model):
     oid = models.CharField(db_column='O_ID', primary_key=True, max_length=3,verbose_name='Organization ID')  # Field name made lowercase.
     odesc = models.CharField(db_column='O_DESC', max_length=50, blank=True, null=True)  # Field name made lowercase.
     class Meta:
@@ -22,7 +22,7 @@ class Org(models.Model):
         return self.oid # admin page 存檔時會用此回傳值    
     
 # settings.py
-AUTH_USER_MODEL = 'usblog.User'  # <<appname>>.User
+AUTH_USER_MODEL = 'user.ATENUser'  # <<appname>>.User
 
 
 # python manage.py makemigrations usblog
@@ -32,7 +32,7 @@ AUTH_USER_MODEL = 'usblog.User'  # <<appname>>.User
 
 #admin.py (org 下拉選單)
 from django.contrib import admin
-from usblog.models import User as MyUser,Org
+from user.models import ATENUser, ATENORG
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django import forms
@@ -42,19 +42,24 @@ class MyModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return '({}){}'.format(obj.oid , obj.odesc)
 
-class MyUserChangeForm(UserChangeForm):
+class ATENUserChangeForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
-        model = MyUser
-    oid = MyModelChoiceField(queryset=Org.objects.all(), label='Organization ID')
+        model = ATENUser
+    oid = MyModelChoiceField(queryset=ATENORG.objects.all(), label='Organization ID')
 
 
-class MyUserAdmin(UserAdmin):
-    form = MyUserChangeForm
+class ATENUserAdmin(UserAdmin):
+    form = ATENUserChangeForm
     fieldsets = UserAdmin.fieldsets + (
             ('Customize', {'fields': ('oid',)}),
     )
 
-admin.site.register(MyUser, MyUserAdmin)
+class ORGAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(ATENUser, ATENUserAdmin)
+admin.site.register(ATENORG, ORGAdmin)
+
 
 
