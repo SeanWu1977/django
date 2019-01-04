@@ -39,3 +39,34 @@ records = Netadaptermonitor.objects.using(db).filter(Q(detecttime__gte=20180703)
 # keyword : Field lookups
 
 
+
+
+#
+from django.db import models
+from datetime import datetime
+from django.core.exceptions import ValidationError
+# Create your models here.
+# 每個Model都會自動建立id欄，不需要特別宣造
+# 发布会
+class Event(models.Model):
+    name = models.CharField(max_length=100)            # 发布会标题
+    limit = models.IntegerField()                      # 限制人数
+    status = models.BooleanField()                     # 状态
+    address = models.CharField(max_length=200)         # 地址
+    start_time = models.DateTimeField('events time')   # 发布会时间
+    create_time = models.DateTimeField(auto_now=True)  # 创建时间（自动获取当前时间）
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs): # 要在model存檔時做檢查可以用此寫法
+        if self.start_time:
+            if not self.start_time > datetime.now():
+                raise ValidationError("start_time must be greater than current time")
+		# if self.end_date:
+		# 	if not self.start_date:
+		# 		raise ValidationError("start time missing. Please check the data")
+		# 	if not self.end_date > self.start_date:
+		# 		raise ValidationError("end time must be greater than start time")
+        super().save(*args, **kwargs)
+
