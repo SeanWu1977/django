@@ -34,7 +34,14 @@ records = Netadaptermonitor.objects.using(db).filter(Q(detecttime__gte=20180703)
 #like select 'computername', 'username','networkadapter',Max('orgnamepath') as orgnamepath,Min('detecttime') as s_time,Max('detecttime') as e_time where  date >= '20180703' group by 'computername', 'username','networkadapter'
 # values()  ==> group by  
 
-
+# foriegn key
+Entry.objects.filter(blog__name__contains='Beatles Blog')
+```
+select * from Entry a
+join blog b
+on a.blog_id=b.id
+where b.name like '%Beatles Blog%'
+```
 
 # keyword : Field lookups
 
