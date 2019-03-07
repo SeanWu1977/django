@@ -34,6 +34,8 @@ class PublisherBookList(ListView):
 
     def get_queryset(self):
         # 此方法同上一個class用 變數 queryset 來覆寫回傳值 
+        # 同時存在時，會以此方法內的回傳值為主，會呼略變數 queryset 
+        #
         # self 會儲存傳進來的變數，字典
         self.publisher = get_object_or_404(Publisher, name=self.kwargs['publisher'])
         return Book.objects.filter(publisher=self.publisher)
