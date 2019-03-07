@@ -48,6 +48,25 @@ class PublisherBookList(ListView):
         # 此處是直接傳字典，所以直接用 self.publisher
         context['publisher'] = self.publisher
         return context    
+    
+
+    
+from django.views import View
+class GreetingView(View):
+    greeting = "Good Day"
+    def get(self, request):
+        return HttpResponse(self.greeting)
+
+class MorningGreetingView(GreetingView):
+    greeting = "Morning to ya "
+    
+    # url dispatch代入的變數會在此方法引入
+    def get(self, request, name): 
+        return HttpResponse(self.greeting + name)
+    
+class aboutview(TemplateView):
+    template_name="view/about.html"    
+    
 ####################### url.py ##########################
 # 說明：as_view()方法會依class的屬性產生資料，並導到預設的template.html
 
@@ -55,6 +74,11 @@ path('publishers/', sign_views.PP.as_view()),
 
 # 傳變數到List
 path('books/<publisher>/', PublisherBookList.as_view()),
+
+
+path('about/', TemplateView.as_view(template_name="view/about.html")),
+path('about1/', sign_views.aboutview.as_view()),
+re_path('hi/(\w+)/', sign_views.MorningGreetingView.as_view()),
 
 # 補充：as_view()方法-->執行後會return self.dispatch(request, *args, **kwargs)
 # dispatch 會依request的方式(get, post, ..), 用getattr()函數 呼叫對應的 function (def get() / def post() ...)
