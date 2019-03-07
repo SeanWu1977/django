@@ -22,10 +22,27 @@ class PP(ListView):
         context['book_list'] = Book.objects.all()
         return context
 
+
+    
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView
+from books.models import Book, Publisher
+
+class PublisherBookList(ListView):
+
+    template_name = 'books/books_by_publisher.html'
+
+    def get_queryset(self):
+        # self 會儲存傳進來的變數，字典
+        self.publisher = get_object_or_404(Publisher, name=self.kwargs['publisher'])
+        return Book.objects.filter(publisher=self.publisher)
 ####################### url.py ##########################
 # 說明：as_view()方法會依class的屬性產生資料，並導到預設的template.html
 
-path('publishers/', sign_views.PP.as_view()),  
+path('publishers/', sign_views.PP.as_view()), 
+
+# 傳變數到List
+path('books/<publisher>/', PublisherBookList.as_view()),
 
 # 補充：as_view()方法-->執行後會return self.dispatch(request, *args, **kwargs)
 # dispatch 會依request的方式(get, post, ..), 用getattr()函數 呼叫對應的 function (def get() / def post() ...)
