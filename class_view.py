@@ -78,7 +78,14 @@ path('books/<publisher>/', PublisherBookList.as_view()),
 
 path('about/', TemplateView.as_view(template_name="view/about.html")),
 path('about1/', sign_views.aboutview.as_view()),
+
+# 以下三個用法是相同
+# re_path ==> (?P<name>pattern)
+# path ==> <username> or <slug:title> ( <viriable name>  or  <data type : viriable name> )
 re_path('hi/(\w+)/', sign_views.MorningGreetingView.as_view()),
+re_path('hi/(?P<name>[0-9]+)/', sign_views.MorningGreetingView.as_view()),
+path('hi/<name>/', sign_views.MorningGreetingView.as_view()),
+
 
 # 補充：as_view()方法-->執行後會return self.dispatch(request, *args, **kwargs)
 # dispatch 會依request的方式(get, post, ..), 用getattr()函數 呼叫對應的 function (def get() / def post() ...)
