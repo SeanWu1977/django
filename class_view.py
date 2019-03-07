@@ -66,6 +66,17 @@ class MorningGreetingView(GreetingView):
     
 class aboutview(TemplateView):
     template_name="view/about.html"    
+
+    
+    
+# path('pubisher/<pk>/', sign_views.PublisherDetail.as_view()),
+# 要傳入一個 pk ，
+# The URLconf here uses the named group pk - this name is the default name that DetailView uses to 
+# find the value of the primary key used to filter the queryset.
+class PublisherDetail(DetailView):
+    model = Publisher
+
+    
     
 ####################### url.py ##########################
 # 說明：as_view()方法會依class的屬性產生資料，並導到預設的template.html
@@ -92,6 +103,7 @@ path('hi/<name>/', sign_views.MorningGreetingView.as_view()),
 
 ####################### template (位於\templates目錄下) ##########################
 ####################### 如沒指定，則位於\templates\<app name>\xxx.html ##########################
+# publisher_list.html #
 {% block content %}
     <h2>Publishers</h2>
     <ul>
@@ -107,3 +119,13 @@ path('hi/<name>/', sign_views.MorningGreetingView.as_view()),
         {% endfor %}
     </ul>   
 {% endblock %}
+
+
+
+
+# publisher_detail.html #
+<h1>{{ object.name }}</h1>
+<p>{{ object.address }}</p>
+<p>{{ object.city }}</p>
+<p>{{ object.state_province }}</p>
+<p>{{ object.country }}</p>
