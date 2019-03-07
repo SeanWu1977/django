@@ -33,6 +33,7 @@ class PublisherBookList(ListView):
     template_name = 'books/books_by_publisher.html'
 
     def get_queryset(self):
+        # 此方法同上一個class用 變數 queryset 來覆寫回傳值 
         # self 會儲存傳進來的變數，字典
         self.publisher = get_object_or_404(Publisher, name=self.kwargs['publisher'])
         return Book.objects.filter(publisher=self.publisher)
