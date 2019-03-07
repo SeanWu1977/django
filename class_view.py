@@ -39,6 +39,15 @@ class PublisherBookList(ListView):
         # self 會儲存傳進來的變數，字典
         self.publisher = get_object_or_404(Publisher, name=self.kwargs['publisher'])
         return Book.objects.filter(publisher=self.publisher)
+    
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in the publisher
+        # 此處是直接傳字典，所以直接用 self.publisher
+        context['publisher'] = self.publisher
+        return context    
 ####################### url.py ##########################
 # 說明：as_view()方法會依class的屬性產生資料，並導到預設的template.html
 
